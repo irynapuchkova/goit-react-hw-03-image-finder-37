@@ -43,6 +43,7 @@ export default class App extends Component {
           images: hits,
           totalHits,
           reqStatus: "resolved",
+          page: 1,
         });
       } catch (error) {
         this.setState({ reqStatus: "rejected" });
