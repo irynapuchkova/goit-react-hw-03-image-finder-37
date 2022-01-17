@@ -70,7 +70,7 @@ export default class App extends Component {
     }
   }
 
-  handleSearchBarInfo = inputValue => {
+  handleSearchbarInfo = inputValue => {
     this.setState({ inputValue });
   };
 
@@ -94,7 +94,7 @@ export default class App extends Component {
 
     return (
       <AppContainer>
-        <Searchbar onSubmit={this.handleSearchBarInfo} />
+        <Searchbar onSubmit={this.handleSearchbarInfo} />
         <ToastContainer role="alert" autoClose={2000} />
         {reqStatus === 'pending' && <Loader />}
         <ImageGallery data={images} onSelect={this.onSelectedImg} />
