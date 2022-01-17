@@ -1,5 +1,5 @@
-import { GoSearch } from "react-icons/go";
-import PropTypes from "prop-types";
+import { GoSearch } from 'react-icons/go';
+import PropTypes from 'prop-types';
 
 import {
   SearchbarHeader,
@@ -7,13 +7,12 @@ import {
   Button,
   ButtonLabel,
   Input,
-} from "./Searchbar.styled";
+} from './Searchbar.styled';
 
 export default function Searchbar({ onSubmit }) {
   function onFormSubmit(e) {
-    const value = e.target.elements.inputValue.value;
     e.preventDefault();
-    onSubmit(value);
+    onSubmit(e.target.elements.inputValue.value.trim());
   }
 
   return (
@@ -37,5 +36,5 @@ export default function Searchbar({ onSubmit }) {
 }
 
 Searchbar.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func,
 };

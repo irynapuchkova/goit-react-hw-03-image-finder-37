@@ -1,5 +1,5 @@
-import { BtnLoadMore } from "./Button.styled";
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
+import { BtnLoadMore } from './Button.styled';
 
 export default function Button({ onClick }) {
   return (

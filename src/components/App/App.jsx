@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
-import { fetchInfo } from '../../API/fetchimages';
+import { fetchInfo } from '../../API/fetchImages';
 import Searchbar from '../Searchbar/Searchbar';
 import Button from '../Button/Button';
 import ImageGallery from '../ImageGallery/ImageGallery';
@@ -22,18 +22,13 @@ export default class App extends Component {
   };
 
   async componentDidUpdate(_, prevState) {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth',
-    });
-
     const { inputValue, page } = this.state;
 
-    if (inputValue.trim() === '') {
+    if (!inputValue) {
       return toast('PlEASE ENTER YOUR QUERY');
     }
 
-    if (prevState.inputValue !== inputValue && inputValue.trim() !== '') {
+    if (prevState.inputValue !== inputValue && inputValue !== '') {
       try {
         this.setState({ reqStatus: 'pending' });
         const { hits, totalHits } = await fetchInfo(inputValue, 1);
@@ -63,6 +58,11 @@ export default class App extends Component {
           images: [...prevState.images, ...hits],
           reqStatus: 'resolved',
         }));
+
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: 'smooth',
+        });
       } catch (error) {
         this.setState({ reqStatus: 'rejected' });
         console.error(error.message);
@@ -70,8 +70,12 @@ export default class App extends Component {
     }
   }
 
-  onLoadmoreButtonClick = e => {
-    if (e.currentTarget === e.target) {
+  handleSearchBarInfo = inputValue => {
+    this.setState({ inputValue });
+  };
+
+  onLoadMoreButtonClick = ({ target, currentTarget }) => {
+    if (currentTarget === target) {
       this.setState(prevState => ({ page: prevState.page + 1 }));
     }
   };
@@ -80,23 +84,24 @@ export default class App extends Component {
     this.setState(prevState => ({ selectedImg: !prevState.selectedImg }));
   };
 
-  onSelectedImg = selectedImage => {
-    this.setState({ selectedImg: selectedImage });
+  onSelectedImg = selectedImg => {
+    this.setState({ selectedImg });
   };
 
   render() {
     const { images, totalHits, selectedImg, reqStatus } = this.state;
     const showBtnLoadMore = images.length >= 12 && images.length < totalHits;
+
     return (
       <AppContainer>
-        <Searchbar onSubmit={value => this.setState({ inputValue: value })} />
+        <Searchbar onSubmit={this.handleSearchBarInfo} />
         <ToastContainer role="alert" autoClose={2000} />
         {reqStatus === 'pending' && <Loader />}
         <ImageGallery data={images} onSelect={this.onSelectedImg} />
-        {showBtnLoadMore && <Button onClick={this.onLoadmoreButtonClick} />}
+        {showBtnLoadMore && <Button onClick={this.onLoadMoreButtonClick} />}
         {selectedImg && (
           <Modal onClose={this.toggleModal}>
-            <img src={selectedImg} alt="" />
+            <img src={selectedImg} alt="Selected Gallery Item" />
           </Modal>
         )}
       </AppContainer>
